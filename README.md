@@ -17,7 +17,7 @@ session["message"] = MESSAGE  # MESSAGE に FLAG が含まれる
 そのため、クッキーからペイロードを取り出してデコードするだけで、フラグを閲覧することが可能です。
 
 ## 解決手順 (Solution Steps)
-1. ターゲットサイト (`http://34.170.146.252:42993/`) にアクセスし、レスポンスヘッダーから `session` クッキーを取得します。
+1. 生成されたターゲットサイトの URL にアクセスし、レスポンスヘッダーから `session` クッキーを取得します。
 2. 取得したクッキーのドット (`.`) で区切られた第1セグメント（圧縮されている場合は第2セグメント）を抽出します。
 3. 抽出した文字列を Base64 デコードします。
 4. 内容が zlib 圧縮されている場合は解凍します。
@@ -25,7 +25,55 @@ session["message"] = MESSAGE  # MESSAGE に FLAG が含まれる
 
 ## 解決スクリプト (Solver)
 以下のスクリプトを使用して、自動的にフラグを取得できます。
-[solve.py](./solve.py)
+
+### 実行方法
+```bash
+python3 solve.py <TARGET_URL>
+```
+
+### solve.py
+```python
+import requests
+import base64
+import zlib
+import json
+import sys
+import re
+
+def solve(url):
+    response = requests.get(url)
+    session_cookie = response.cookies.get("session")
+    
+    if not session_cookie:
+        return
+
+    parts = session_cookie.split('.')
+    if session_cookie.startswith('.'):
+        payload_b64 = parts[1]
+        is_compressed = True
+    else:
+        payload_b64 = parts[0]
+        is_compressed = False
+
+    payload_b64 += '=' * (-len(payload_b64) % 4)
+    decoded_bytes = base64.urlsafe_b64decode(payload_b64)
+
+    if is_compressed:
+        decoded_bytes = zlib.decompress(decoded_bytes)
+
+    data = json.loads(decoded_bytes)
+    if "message" in data:
+        message = data["message"]
+        flag = re.search(r"Alpaca\{.*?\}", message)
+        if flag:
+            print(f"FLAG: {flag.group(0)}")
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(f"Usage: python3 {sys.argv[0]} <url>")
+        sys.exit(1)
+    solve(sys.argv[1])
+```
 
 ## 感想
 Flask のセッションがデフォルトで暗号化されないことは非常に有名な性質ですが、CTF の導入として非常に勉強になる良い問題でした。
