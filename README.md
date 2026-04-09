@@ -1,4 +1,4 @@
-# AlpacaHack Daily: Message For You - Writeup
+# Daily AlpacaHack: Message For You - Writeup
 
 ## 概要 (Summary)
 この問題は Flask Web アプリケーションのセッション管理に焦点を当てたものです。
