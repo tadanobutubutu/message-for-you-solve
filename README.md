@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Solved with Google Antigravity**
+> この問題は Google の強力な AI コーディングアシスタント **Antigravity** を活用して解決されました。
+
 # Daily AlpacaHack: Message For You - Writeup
 
 ## 概要 (Summary)
@@ -78,5 +82,3 @@ if __name__ == "__main__":
 ## 感想
 Flask のセッションがデフォルトで暗号化されないことは非常に有名な性質ですが、CTF の導入として非常に勉強になる良い問題でした。
 シークレットキーがランダム生成されていても、読み取りに関しては無力であるという教訓が得られました。
-
-この問題はgoogleのantigravityを使って解きました。
