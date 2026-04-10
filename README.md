@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 > **Solved with Google Antigravity**
-> この問題は Google の強力な AI コーディングアシスタント **Antigravity** を活用して解決されました。
+> この問題は Google の AI コーディングアシスタント **Antigravity** を活用して解決されました。
 
 # Daily AlpacaHack: Message For You - Writeup
 
